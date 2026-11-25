@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Karaoke</title>
+  <style>
+    :root { --bg: #0d0b1a; --panel: #18152e; --line: #322c5a; --text: #f4f1ff; --muted: #a49cc9; --accent: #ff4fa3; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+      background: radial-gradient(circle at 50% 10%, #2d1f5e, var(--bg) 70%); color: var(--text);
+      font: 16px/1.5 "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    main { width: 100%; max-width: 720px; text-align: center; }
+    h1 { font-size: 44px; margin: 0 0 6px; }
+    p { color: var(--muted); margin: 0 0 28px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    a.card { display: block; text-decoration: none; color: var(--text); background: var(--panel); border: 1px solid var(--line);
+      border-radius: 16px; padding: 28px 20px; transition: border-color .15s, transform .15s; }
+    a.card:hover, a.card:focus { border-color: var(--accent); transform: translateY(-2px); outline: none; }
+    .icon { font-size: 48px; }
+    .card h2 { margin: 8px 0 4px; font-size: 22px; }
+    .card span { color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🎤 Karaoke</h1>
+    <p>Open the TV screen on the TV, then scan its QR code with your phone.</p>
+    <div class="cards">
+      <a class="card" href="tv.html"><div class="icon">📺</div><h2>TV screen</h2><span>Plays the songs. Open this on the TV browser.</span></a>
+      <a class="card" href="remote.html"><div class="icon">📱</div><h2>Phone remote</h2><span>Search and add songs, skip, pause.</span></a>
+    </div>
+  </main>
+</body>
+</html>

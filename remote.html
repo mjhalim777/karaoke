@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18152e">
+  <title>Karaoke Remote</title>
+  <link rel="stylesheet" href="css/remote.css">
+</head>
+<body>
+  <!-- Join screen -->
+  <section id="joinView" class="join">
+    <h1>🎤 Karaoke</h1>
+    <p>Enter the room code shown on the TV</p>
+    <form id="joinForm" autocomplete="off">
+      <input id="joinCode" class="code-input" maxlength="4" placeholder="ABCD" autocapitalize="characters" inputmode="text" required>
+      <button class="btn primary" type="submit">Join</button>
+    </form>
+    <p id="joinError" class="error"></p>
+  </section>
+
+  <!-- Main remote -->
+  <section id="mainView" class="hidden">
+    <header class="top">
+      <div class="room-line">
+        <span>Room <b id="roomCode"></b></span>
+        <span id="tvStatus" class="status"></span>
+        <button id="leaveBtn" class="link-btn" type="button">Leave</button>
+      </div>
+      <div class="now">
+        <div class="now-text">
+          <p class="small">Now playing</p>
+          <p id="nowTitle" class="now-title">Nothing playing</p>
+          <p id="nowSinger" class="small accent"></p>
+        </div>
+        <div class="now-btns">
+          <button id="pauseBtn" class="btn round" type="button" aria-label="Pause">⏸</button>
+          <button id="skipBtn" class="btn round" type="button" aria-label="Skip">⏭</button>
+        </div>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="search" type="button">Add songs</button>
+        <button class="tab" data-tab="queue" type="button">Queue <span id="queueCount" class="pill">0</span></button>
+      </nav>
+    </header>
+
+    <main>
+      <div id="tab-search" class="tab-panel">
+        <label class="singer">
+          <span>Singer name (optional)</span>
+          <input id="singerName" maxlength="30" placeholder="e.g. MJ">
+        </label>
+
+        <form id="searchForm" class="row hidden" autocomplete="off">
+          <input id="searchInput" type="search" placeholder="Song or artist…" enterkeyhint="search">
+          <button class="btn primary" type="submit">Search</button>
+        </form>
+        <p id="searchNote" class="small muted hidden">Searches add “karaoke” automatically.</p>
+
+        <details id="linkBox" class="link-box">
+          <summary>Paste a YouTube link</summary>
+          <form id="linkForm" class="row" autocomplete="off">
+            <input id="linkInput" type="url" placeholder="https://youtu.be/…">
+            <button class="btn primary" type="submit">Add</button>
+          </form>
+        </details>
+
+        <p id="searchStatus" class="small muted"></p>
+        <ul id="results" class="list"></ul>
+      </div>
+
+      <div id="tab-queue" class="tab-panel hidden">
+        <ul id="queueList" class="list"></ul>
+      </div>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+    <p id="modeNote" class="mode-note hidden"></p>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/remote.js"></script>
+</body>
+</html>

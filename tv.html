@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Karaoke TV</title>
+  <link rel="stylesheet" href="css/tv.css">
+</head>
+<body>
+  <!-- Start screen: browsers only allow sound after a click / OK press -->
+  <div id="start" class="start">
+    <h1>🎤 Karaoke</h1>
+    <p class="start-room">Room <span class="room-code" id="startCode">····</span></p>
+    <button id="startBtn" class="big-btn" autofocus>▶ Start</button>
+    <p class="hint">Press OK / Enter on your remote to start (also turns on fullscreen)</p>
+    <p class="hint"><a href="#" id="newRoomLink">Make a new room code</a></p>
+  </div>
+
+  <div id="app" class="app hidden">
+    <main class="stage">
+      <div id="playerWrap" class="player-wrap">
+        <div id="player"></div>
+      </div>
+
+      <!-- Idle screen: nothing in the queue -->
+      <div id="idle" class="idle">
+        <h1>🎤 Scan to add a song</h1>
+        <div class="idle-join">
+          <div id="qrBig" class="qr qr-big"></div>
+          <div>
+            <p class="label">Room code</p>
+            <p class="room-code huge" id="idleCode">····</p>
+            <p class="join-url" id="joinUrl"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast hidden"></div>
+      <div id="pausedBadge" class="paused-badge hidden">⏸ Paused</div>
+    </main>
+
+    <aside class="side">
+      <section class="now">
+        <p class="label">Now singing</p>
+        <p class="now-title" id="nowTitle">—</p>
+        <p class="now-singer" id="nowSinger"></p>
+      </section>
+
+      <section class="next">
+        <p class="label">Up next <span id="nextCount"></span></p>
+        <ol id="nextList" class="next-list"></ol>
+      </section>
+
+      <section class="controls">
+        <button id="pauseBtn" class="ctl-btn">⏸ Pause</button>
+        <button id="skipBtn" class="ctl-btn">⏭ Skip</button>
+      </section>
+
+      <section class="join-small">
+        <div id="qrSmall" class="qr qr-small"></div>
+        <div>
+          <p class="label">Join room</p>
+          <p class="room-code" id="sideCode">····</p>
+        </div>
+      </section>
+      <p id="modeNote" class="mode-note hidden"></p>
+    </aside>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/tv.js"></script>
+</body>
+</html>
