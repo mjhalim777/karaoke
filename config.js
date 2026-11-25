@@ -21,4 +21,4 @@ window.FIREBASE_CONFIG = {
 //    Leave empty ("") and phones can still add songs by pasting a YouTube link.
 //    This key is PUBLIC once the site is online, so restrict it to your
 //    GitHub Pages address in Google Cloud (see README.md).
-window.YOUTUBE_API_KEY = "";
+window.YOUTUBE_API_KEY = "AIzaSyCH7AxGYc3kJtLRMZ6q6Cj9-ohmIjRltyU";
