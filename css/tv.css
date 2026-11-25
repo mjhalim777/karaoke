@@ -73,3 +73,10 @@ h1 { margin: 0; }
 .join-small { display: flex; align-items: center; gap: 1.2vw; }
 .join-small .qr { padding: 6px; border-radius: 8px; }
 .mode-note { margin: 0; font-size: 1.1vw; color: var(--accent-2); }
+
+/* covers the whole screen while muted, so a tap anywhere (even on the video) turns sound on */
+.unmute { position: fixed; inset: 0; z-index: 50; cursor: pointer; }
+.unmute span { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); white-space: nowrap;
+  background: #ff4fa3; color: #fff; font-size: 24px; font-weight: 700; padding: 14px 28px; border-radius: 999px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.5); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: translateX(-50%) scale(1.05); } }

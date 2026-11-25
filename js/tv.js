@@ -105,6 +105,7 @@
       loadedKey = cur.key;
       appliedPaused = false;
       player.loadVideoById(cur.videoId);
+      ensurePlaying(cur.key);
     } else if (!cur && loadedKey) {
       loadedKey = null;
       player.stopVideo();
@@ -142,6 +143,31 @@
       }
     });
   };
+
+  // Browsers may block autoplay with sound until someone clicks the page.
+  // If the song hasn't started shortly after loading, play it muted and ask for one tap to unmute.
+  var needsUnmute = false;
+  function ensurePlaying(key) {
+    setTimeout(function () {
+      if (!player || !data.current || data.current.key !== key || data.paused) return;
+      var st = player.getPlayerState();
+      if (st === window.YT.PlayerState.PLAYING || st === window.YT.PlayerState.BUFFERING) return;
+      player.mute();
+      player.playVideo();
+      needsUnmute = true;
+      $('unmute').classList.remove('hidden');
+    }, 1500);
+  }
+  function unmute() {
+    if (!needsUnmute || !player) return;
+    needsUnmute = false;
+    player.unMute();
+    player.setVolume(100);
+    $('unmute').classList.add('hidden');
+  }
+  document.addEventListener('click', unmute, true);
+  document.addEventListener('keydown', unmute, true);
+  document.addEventListener('touchstart', unmute, true);
 
   // pasted links may have no title yet: take it from the player
   function fillTitle() {
@@ -182,6 +208,7 @@
     $('skipBtn').focus();
   }
   $('startBtn').addEventListener('click', start);
+  start(); // don't wait for a click: songs added from a phone play right away
 
   // ----- TV controls -----
   $('skipBtn').addEventListener('click', function () { if (data.current) advance('tv-skip'); });
