@@ -80,3 +80,16 @@ h1 { margin: 0; }
   background: #ff4fa3; color: #fff; font-size: 24px; font-weight: 700; padding: 14px 28px; border-radius: 999px;
   box-shadow: 0 6px 24px rgba(0,0,0,.5); animation: pulse 1.6s ease-in-out infinite; }
 @keyframes pulse { 50% { transform: translateX(-50%) scale(1.05); } }
+
+/* score pop-up after a song ends */
+.score { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+  background: rgba(8, 6, 20, .78); backdrop-filter: blur(6px); }
+.score-card { text-align: center; padding: 4vh 6vw; border-radius: 32px; min-width: 40vw;
+  background: linear-gradient(160deg, #2d1f5e, #18152e); border: 3px solid #ff4fa3;
+  box-shadow: 0 0 80px rgba(255, 79, 163, .45); animation: pop .5s cubic-bezier(.2, 1.6, .4, 1); }
+.score-label { margin: 0; font-size: 3vw; color: #a49cc9; letter-spacing: .1em; text-transform: uppercase; }
+.score-num { margin: 0; font-size: 16vw; line-height: 1.05; font-weight: 900; font-variant-numeric: tabular-nums;
+  background: linear-gradient(90deg, #ffd166, #ff4fa3); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.score-msg { margin: 0; font-size: 3.4vw; font-weight: 800; color: #fff; }
+.score-who { margin: 1.5vh 0 0; font-size: 1.8vw; color: #a49cc9; }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }

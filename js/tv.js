@@ -43,6 +43,7 @@
 
   // ----- queue control (only the TV moves songs from queue to "current") -----
   function advance(reason) {
+    if (scoring) { scoring = false; clearTimeout(scoreTimer); $('score').classList.add('hidden'); } // e.g. skipped from a phone during the score
     var fromKey = data.current ? data.current.key : null;
     if (advancingFrom !== undefined && advancingFrom === fromKey) return; // already on it
     advancingFrom = fromKey;
@@ -132,7 +133,7 @@
       events: {
         onReady: function () { playerReady = true; sync(); },
         onStateChange: function (e) {
-          if (e.data === window.YT.PlayerState.ENDED) advance('ended');
+          if (e.data === window.YT.PlayerState.ENDED) showScore();
           if (e.data === window.YT.PlayerState.PLAYING) fillTitle();
         },
         onError: function () {
@@ -168,6 +169,48 @@
   document.addEventListener('click', unmute, true);
   document.addEventListener('keydown', unmute, true);
   document.addEventListener('touchstart', unmute, true);
+
+  // ----- score pop-up: a random 60–100 after each finished song, then the next song starts -----
+  var scoring = false;
+  var scoreTimer = null;
+  function scoreMessage(n) {
+    if (n >= 98) return '🏆 PERFECT! Superstar!';
+    if (n >= 90) return '🌟 Amazing!';
+    if (n >= 80) return '👏 Great job!';
+    if (n >= 70) return '🙂 Nice one!';
+    return '😅 Keep practicing!';
+  }
+  function showScore() {
+    var cur = data.current;
+    if (!cur || scoring) return;
+    scoring = true;
+    var finalScore = 60 + Math.floor(Math.random() * 41); // 60..100
+    $('scoreWho').textContent = (cur.singer ? cur.singer + ' · ' : '') + (cur.title || '');
+    $('scoreMsg').textContent = '';
+    $('score').classList.remove('hidden');
+    // count up for drama
+    var shown = 0;
+    var tick = setInterval(function () {
+      shown = Math.min(finalScore, shown + Math.ceil((finalScore - shown) / 6) || 1);
+      $('scoreNum').textContent = shown;
+      if (shown >= finalScore) {
+        clearInterval(tick);
+        $('scoreMsg').textContent = scoreMessage(finalScore);
+      }
+    }, 60);
+    scoreTimer = setTimeout(closeScore, 7000);
+  }
+  function closeScore() {
+    if (!scoring) return;
+    scoring = false;
+    clearTimeout(scoreTimer);
+    $('score').classList.add('hidden');
+    advance('ended');
+  }
+  $('score').addEventListener('click', closeScore);
+  document.addEventListener('keydown', function (e) {
+    if (scoring && (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape')) { e.preventDefault(); e.stopImmediatePropagation(); closeScore(); }
+  }, true);
 
   // pasted links may have no title yet: take it from the player
   function fillTitle() {
