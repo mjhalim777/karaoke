@@ -131,7 +131,18 @@
 
   // ---------- singer name (remembered on this phone) ----------
   $('singerName').value = localStorage.getItem('karaoke-singer') || '';
-  $('singerName').addEventListener('input', function () { localStorage.setItem('karaoke-singer', $('singerName').value); });
+  $('singerName').addEventListener('input', function () {
+    localStorage.setItem('karaoke-singer', $('singerName').value);
+    updateRandomBtn();
+  });
+  // the random song button only works once a singer name is typed
+  function updateRandomBtn() {
+    var btn = $('randomBtn');
+    if (btn.classList.contains('spin')) return; // busy picking
+    var hasName = !!$('singerName').value.trim();
+    btn.disabled = !hasName;
+    btn.textContent = hasName ? '🎲 Add a random song' : '🎲 Type your name to get a random song';
+  }
 
   // ---------- YouTube search ----------
   var apiKey = window.YOUTUBE_API_KEY;
@@ -139,6 +150,7 @@
     $('searchForm').classList.remove('hidden');
     $('searchNote').classList.remove('hidden');
     $('randomBtn').classList.remove('hidden');
+    updateRandomBtn();
   } else {
     $('linkBox').open = true;
     $('searchStatus').textContent = 'Search is off (no YouTube API key). Copy a link from the YouTube app (Share → Copy link) and paste it above.';
@@ -148,7 +160,7 @@
   var lastRandom = '';
   $('randomBtn').addEventListener('click', function () {
     var list = window.KARAOKE_RANDOM_SONGS || [];
-    if (!list.length || !room) return;
+    if (!list.length || !room || !$('singerName').value.trim()) return;
     var pick;
     do { pick = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && pick === lastRandom);
     lastRandom = pick;
@@ -167,9 +179,8 @@
     }).catch(function (err) {
       toast('Random song failed: ' + err.message);
     }).then(function () {
-      btn.disabled = false;
       btn.classList.remove('spin');
-      btn.textContent = '🎲 Add a random song';
+      updateRandomBtn();
     });
   });
 
