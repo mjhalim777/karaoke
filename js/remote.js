@@ -138,10 +138,40 @@
   if (apiKey) {
     $('searchForm').classList.remove('hidden');
     $('searchNote').classList.remove('hidden');
+    $('randomBtn').classList.remove('hidden');
   } else {
     $('linkBox').open = true;
     $('searchStatus').textContent = 'Search is off (no YouTube API key). Copy a link from the YouTube app (Share → Copy link) and paste it above.';
   }
+
+  // ---------- Random song ----------
+  var lastRandom = '';
+  $('randomBtn').addEventListener('click', function () {
+    var list = window.KARAOKE_RANDOM_SONGS || [];
+    if (!list.length || !room) return;
+    var pick;
+    do { pick = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && pick === lastRandom);
+    lastRandom = pick;
+    var btn = $('randomBtn');
+    btn.disabled = true;
+    btn.classList.add('spin');
+    btn.textContent = '🎲 Picking… ' + pick;
+    S.countSearch();
+    var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=1' +
+      '&q=' + encodeURIComponent(pick + ' karaoke') + '&key=' + encodeURIComponent(apiKey);
+    fetch(url).then(function (r) { return r.json(); }).then(function (json) {
+      if (json.error) throw new Error(json.error.message || 'YouTube error');
+      var it = (json.items || [])[0];
+      if (!it || !it.id || !it.id.videoId) throw new Error('nothing found for ' + pick);
+      addSong(it.id.videoId, decodeEntities(it.snippet.title));
+    }).catch(function (err) {
+      toast('Random song failed: ' + err.message);
+    }).then(function () {
+      btn.disabled = false;
+      btn.classList.remove('spin');
+      btn.textContent = '🎲 Add a random song';
+    });
+  });
 
   var lastResults = [];
   $('searchForm').addEventListener('submit', function (e) {

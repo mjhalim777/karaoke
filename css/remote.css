@@ -81,3 +81,8 @@ main { padding: 14px 16px 90px; max-width: 640px; margin: 0 auto; }
   background: #fff; color: #111; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-align: center;
   box-shadow: 0 8px 24px rgba(0,0,0,.4); z-index: 10; }
 .mode-note { text-align: center; font-size: 12px; color: var(--accent-2); padding: 0 16px 20px; }
+
+.btn.random { width: 100%; margin-top: 10px; color: #fff; font-size: 17px;
+  background: linear-gradient(90deg, #7b5cff, #ff4fa3); }
+.btn.random.spin { animation: wobble .5s ease-in-out infinite; }
+@keyframes wobble { 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
