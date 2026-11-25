@@ -47,6 +47,7 @@
       <nav class="tabs">
         <button class="tab active" data-tab="search" type="button">Add songs</button>
         <button class="tab" data-tab="queue" type="button">Queue <span id="queueCount" class="pill">0</span></button>
+        <button class="tab" data-tab="settings" type="button" aria-label="Settings">⚙️</button>
       </nav>
     </header>
 
@@ -78,6 +79,18 @@
 
       <div id="tab-queue" class="tab-panel hidden">
         <ul id="queueList" class="list"></ul>
+      </div>
+
+      <div id="tab-settings" class="tab-panel hidden">
+        <p class="small muted">These apply to the TV for everyone in this room.</p>
+        <label class="switch-row">
+          <span><b>Score after each song</b><br><span class="small muted">Random 60–100 pop-up on the TV</span></span>
+          <input id="optScore" type="checkbox" class="switch" checked>
+        </label>
+        <label class="switch-row">
+          <span><b>Score sounds</b><br><span class="small muted">Drum roll, fanfare and clapping</span></span>
+          <input id="optScoreSound" type="checkbox" class="switch" checked>
+        </label>
       </div>
     </main>
 

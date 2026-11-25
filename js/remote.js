@@ -41,9 +41,18 @@
     location.href = location.pathname;
   });
 
+  // ---------- settings (shared by the room, read by the TV) ----------
+  // missing = on, so older rooms keep the score and sounds
+  $('optScore').addEventListener('change', function () { if (room) room.set('settings/score', this.checked); });
+  $('optScoreSound').addEventListener('change', function () { if (room) room.set('settings/scoreSound', this.checked); });
+
   // ---------- render ----------
   function render() {
     var cur = data.current;
+    var st = data.settings || {};
+    $('optScore').checked = st.score !== false;
+    $('optScoreSound').checked = st.scoreSound !== false;
+    $('optScoreSound').disabled = st.score === false; // no score, no score sound
     $('tvStatus').textContent = data.createdAt ? '● TV connected' : '○ No TV with this code yet';
     $('tvStatus').className = 'status ' + (data.createdAt ? 'ok' : 'warn');
     $('nowTitle').textContent = cur ? (cur.title || 'Loading…') : 'Nothing playing';
@@ -126,6 +135,7 @@
       Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (x) { x.classList.toggle('active', x === t); });
       $('tab-search').classList.toggle('hidden', name !== 'search');
       $('tab-queue').classList.toggle('hidden', name !== 'queue');
+      $('tab-settings').classList.toggle('hidden', name !== 'settings');
     });
   });
 
