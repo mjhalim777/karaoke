@@ -8,13 +8,13 @@
 //    Leave apiKey empty ("") to run in DEMO MODE, which only syncs
 //    between tabs of the same browser on one computer (good for testing).
 window.FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",        // REQUIRED, e.g. https://your-project-default-rtdb.asia-southeast1.firebasedatabase.app
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyA3oK-3qCxRv8BMg7qcg_fSoP7rrhrAmqA",
+  authDomain: "karaoke-24c7c.firebaseapp.com",
+  databaseURL: "https://karaoke-24c7c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "karaoke-24c7c",
+  storageBucket: "karaoke-24c7c.firebasestorage.app",
+  messagingSenderId: "344256829982",
+  appId: "1:344256829982:web:cde3e1885e57d0b9786c0f"
 };
 
 // 2) YouTube Data API v3 key (lets phones search for songs).
