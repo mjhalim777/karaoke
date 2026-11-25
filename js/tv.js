@@ -188,6 +188,7 @@
     $('scoreWho').textContent = (cur.singer ? cur.singer + ' · ' : '') + (cur.title || '');
     $('scoreMsg').textContent = '';
     $('score').classList.remove('hidden');
+    if (window.KaraokeSfx) window.KaraokeSfx.celebrate(finalScore, 0.8);
     // count up for drama
     var shown = 0;
     var tick = setInterval(function () {
