@@ -38,6 +38,21 @@ Firebase is what lets a phone add a song and have it show up on the TV.
            ".read": "$code.matches(/^[A-HJ-NP-Z2-9]{4}$/)",
            ".write": "$code.matches(/^[A-HJ-NP-Z2-9]{4}$/)"
          }
+       },
+       "stats": {
+         ".read": true,
+         "searches": {
+           "$day": {
+             ".write": "$day.matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)",
+             ".validate": "newData.isNumber() && newData.val() === (data.exists() ? data.val() + 1 : 1)"
+           }
+         },
+         "online": {
+           "$id": {
+             ".write": true,
+             ".validate": "newData.val() === 'tv' || newData.val() === 'phone'"
+           }
+         }
        }
      }
    }
@@ -125,3 +140,7 @@ Then open http://localhost:8000/tv.html in one tab and http://localhost:8000/rem
 | `remote.html`, `js/remote.js`, `css/remote.css` | Phone remote |
 | `js/sync.js` | Talks to Firebase (or demo mode) |
 | `config.js` | Your Firebase settings and YouTube key |
+
+## Usage page
+
+`usage.html` shows how much of each free limit is used: YouTube searches today (out of ~100/day) and devices connected to Firebase right now (out of 100). The TV and phone pages write these counts under `stats/` in the database, which the rules above allow.

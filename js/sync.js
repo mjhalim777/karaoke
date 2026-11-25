@@ -132,6 +132,34 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
+
+  // ---------- usage stats (shown on usage.html) ----------
+  // stats/searches/{day}: YouTube searches that day. The day follows US Pacific time,
+  //   because that is when Google resets the daily YouTube quota.
+  // stats/online/{id}: one entry per open TV/phone page, removed when it disconnects.
+  function quotaDay() {
+    try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles' }).format(new Date()); }
+    catch (e) { return new Date().toISOString().slice(0, 10); }
+  }
+  function statsRef(path) {
+    if (!hasFirebase()) return null;
+    if (!window.firebase.apps.length) window.firebase.initializeApp(window.FIREBASE_CONFIG);
+    return window.firebase.database().ref('stats/' + path);
+  }
+  function countSearch() {
+    var r = statsRef('searches/' + quotaDay());
+    if (r) r.transaction(function (n) { return (n || 0) + 1; });
+  }
+  function trackOnline(kind) {
+    if (!hasFirebase()) return;
+    var me = statsRef('online').push();
+    window.firebase.database().ref('.info/connected').on('value', function (s) {
+      if (!s.val()) return;
+      me.onDisconnect().remove();
+      me.set(kind === 'tv' ? 'tv' : 'phone');
+    });
+  }
+
   window.KaraokeSync = {
     connect: function (code) { return hasFirebase() ? new FirebaseRoom(code) : new LocalRoom(code); },
     isDemo: function () { return !hasFirebase(); },
@@ -139,6 +167,10 @@
     cleanCode: cleanCode,
     isValidCode: isValidCode,
     sortedQueue: sortedQueue,
-    escapeHtml: escapeHtml
+    escapeHtml: escapeHtml,
+    quotaDay: quotaDay,
+    statsRef: statsRef,
+    countSearch: countSearch,
+    trackOnline: trackOnline
   };
 })();

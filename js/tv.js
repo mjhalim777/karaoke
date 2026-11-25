@@ -27,6 +27,7 @@
   });
 
   var room = S.connect(code);
+  S.trackOnline('tv');
   if (room.mode === 'demo') {
     $('modeNote').textContent = 'Demo mode: Firebase is not set up, so only tabs in this browser can join.';
     $('modeNote').classList.remove('hidden');

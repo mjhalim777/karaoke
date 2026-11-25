@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Karaoke Usage</title>
+  <style>
+    :root { --bg: #0d0b1a; --panel: #18152e; --line: #322c5a; --text: #f4f1ff; --muted: #a49cc9; --accent: #ff4fa3;
+      --ok: #3ddc97; --warn: #ffc542; --bad: #ff5c6c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; padding: 32px 16px; color: var(--text);
+      background: radial-gradient(circle at 50% 0%, #2d1f5e, var(--bg) 70%);
+      font: 16px/1.5 "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; }
+    h1 { margin: 0 0 4px; font-size: 32px; }
+    .sub { color: var(--muted); margin: 0 0 24px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .name { font-weight: 600; font-size: 18px; }
+    .pct { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .bar { height: 12px; background: #0d0b1a; border-radius: 6px; overflow: hidden; margin: 10px 0 8px; }
+    .fill { height: 100%; width: 0; background: var(--ok); border-radius: 6px; transition: width .4s; }
+    .detail { color: var(--muted); font-size: 14px; }
+    .detail b { color: var(--text); font-weight: 600; }
+    a { color: var(--accent); }
+    .note { color: var(--muted); font-size: 13px; margin-top: 24px; }
+    .err { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>📊 Usage</h1>
+    <p class="sub">How much of each free limit is used. Updates live. <a href="index.html">← Back</a></p>
+
+    <div class="card" id="yt">
+      <div class="head"><span class="name">YouTube search (today)</span><span class="pct" id="ytPct">–</span></div>
+      <div class="bar"><div class="fill" id="ytBar"></div></div>
+      <div class="detail" id="ytDetail">Loading…</div>
+    </div>
+
+    <div class="card" id="fbc">
+      <div class="head"><span class="name">Firebase: devices connected now</span><span class="pct" id="fbPct">–</span></div>
+      <div class="bar"><div class="fill" id="fbBar"></div></div>
+      <div class="detail" id="fbDetail">Loading…</div>
+    </div>
+
+    <div class="card">
+      <div class="head"><span class="name">YouTube search (last 30 days)</span><span class="pct" id="ytMonth">–</span></div>
+      <div class="detail" id="ytMonthDetail">Searches per day, newest first.</div>
+    </div>
+
+    <div class="card">
+      <div class="head"><span class="name">Firebase storage &amp; downloads · GitHub Pages traffic</span><span class="pct">≈ 0%</span></div>
+      <div class="detail">The site only stores the song queue (a few KB), so these stay far below their limits
+        (Firebase: 1 GB stored, 10 GB/month downloaded; GitHub Pages: ~100 GB/month).
+        Exact numbers: <a href="https://console.firebase.google.com/project/karaoke-24c7c/database/karaoke-24c7c-default-rtdb/usage" target="_blank" rel="noopener">Firebase usage</a>
+        · <a href="https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas" target="_blank" rel="noopener">YouTube quota (official)</a>.</div>
+    </div>
+
+    <p class="note">Counts come from the karaoke pages themselves, so searches made outside this site with the same key aren't included.
+      The YouTube limit is about 100 searches a day and resets at midnight US Pacific time (3–4 PM in the Philippines).</p>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="js/sync.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var S = window.KaraokeSync;
+    var SEARCH_LIMIT = 100, CONN_LIMIT = 100;
+    function $(id) { return document.getElementById(id); }
+
+    function show(prefix, used, limit) {
+      var pct = Math.min(100, used / limit * 100);
+      $(prefix + 'Pct').textContent = (pct < 10 ? pct.toFixed(1) : Math.round(pct)) + '%';
+      var bar = $(prefix + 'Bar');
+      bar.style.width = Math.max(pct, used ? 1 : 0) + '%';
+      bar.style.background = pct >= 90 ? 'var(--bad)' : pct >= 70 ? 'var(--warn)' : 'var(--ok)';
+    }
+
+    function untilReset() {
+      // Next midnight in US Pacific time.
+      var now = new Date();
+      var la = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+      var next = new Date(la); next.setHours(24, 0, 0, 0);
+      var mins = Math.round((next - la) / 60000);
+      return Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm';
+    }
+
+    var searchesRef = S.statsRef('searches');
+    if (!searchesRef) {
+      $('ytDetail').innerHTML = $('fbDetail').innerHTML = '<span class="err">Firebase is not set up in config.js.</span>';
+      return;
+    }
+
+    searchesRef.orderByKey().limitToLast(30).on('value', function (snap) {
+      var all = snap.val() || {};
+      var today = all[S.quotaDay()] || 0;
+      show('yt', today, SEARCH_LIMIT);
+      $('ytDetail').innerHTML = '<b>' + today + '</b> of ~' + SEARCH_LIMIT + ' searches used · <b>' +
+        Math.max(0, SEARCH_LIMIT - today) + '</b> left · resets in <b>' + untilReset() + '</b>';
+      var days = Object.keys(all).sort().reverse();
+      var total = days.reduce(function (t, d) { return t + all[d]; }, 0);
+      $('ytMonth').textContent = total + ' searches';
+      $('ytMonthDetail').innerHTML = days.length
+        ? days.map(function (d) { return d + ': <b>' + all[d] + '</b>'; }).join(' · ')
+        : 'No searches yet.';
+    }, function (err) { $('ytDetail').innerHTML = '<span class="err">Can\'t read stats: ' + S.escapeHtml(err.message) + '</span>'; });
+
+    S.statsRef('online').on('value', function (snap) {
+      var all = snap.val() || {};
+      var ids = Object.keys(all);
+      var tvs = ids.filter(function (k) { return all[k] === 'tv'; }).length;
+      show('fb', ids.length, CONN_LIMIT);
+      $('fbDetail').innerHTML = '<b>' + ids.length + '</b> of ' + CONN_LIMIT + ' allowed at once · ' +
+        '<b>' + tvs + '</b> TV, <b>' + (ids.length - tvs) + '</b> phone' + (ids.length - tvs === 1 ? '' : 's') +
+        ' (this page not counted)';
+    }, function (err) { $('fbDetail').innerHTML = '<span class="err">Can\'t read stats: ' + S.escapeHtml(err.message) + '</span>'; });
+
+    setInterval(function () { searchesRef.once('value'); }, 60000); // keep the reset countdown fresh
+  })();
+  </script>
+</body>
+</html>

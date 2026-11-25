@@ -19,11 +19,13 @@
     join(c);
   });
 
+  var onlineTracked = false;
   function join(c) {
     code = c;
     localStorage.setItem('karaoke-remote-room', c);
     if (new URLSearchParams(location.search).get('room') !== c) history.replaceState(null, '', '?room=' + c);
     room = S.connect(c);
+    if (!onlineTracked) { S.trackOnline('phone'); onlineTracked = true; }
     $('roomCode').textContent = c;
     $('joinView').classList.add('hidden');
     $('mainView').classList.remove('hidden');
@@ -152,6 +154,7 @@
     $('results').innerHTML = '';
     var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=15' +
       '&q=' + encodeURIComponent(q) + '&key=' + encodeURIComponent(apiKey);
+    S.countSearch();
     fetch(url).then(function (r) { return r.json(); }).then(function (json) {
       if (json.error) throw new Error(json.error.message || 'YouTube error');
       lastResults = (json.items || []).filter(function (it) { return it.id && it.id.videoId; }).map(function (it) {
