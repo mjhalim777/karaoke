@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Karaoke TV</title>
-  <link rel="stylesheet" href="css/tv.css">
+  <link rel="stylesheet" href="css/tv.css?v=202611280818">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0d0b1a">
   <link rel="icon" href="icons/icon-192.png">
@@ -27,6 +27,7 @@
       <div id="playerWrap" class="player-wrap">
         <div id="player"></div>
       </div>
+      <div id="seek" class="seek hidden" aria-hidden="true"><div id="seekFill" class="seek-fill"></div></div>
 
       <!-- Idle screen: nothing in the queue -->
       <div id="idle" class="idle">
@@ -83,13 +84,13 @@
     </aside>
   </div>
 
-  <script src="config.js"></script>
+  <script src="config.js?v=202611280818"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="js/sync.js"></script>
-  <script src="js/sfx.js"></script>
-  <script src="js/tv.js"></script>
-  <script src="js/pwa.js"></script>
+  <script src="js/sync.js?v=202611280818"></script>
+  <script src="js/sfx.js?v=202611280818"></script>
+  <script src="js/tv.js?v=202611280818"></script>
+  <script src="js/pwa.js?v=202611280818"></script>
 </body>
 </html>

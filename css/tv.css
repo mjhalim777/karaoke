@@ -40,10 +40,10 @@ h1 { margin: 0; }
 .idle-join { display: flex; align-items: center; gap: 4vw; text-align: left; }
 .join-url { color: var(--muted); font-size: 1.4vw; margin: 1vh 0 0; word-break: break-all; max-width: 30vw; }
 
-.qr { background: #fff; padding: 12px; border-radius: 12px; line-height: 0; }
-.qr img, .qr canvas { display: block; }
-.qr-big img, .qr-big canvas { width: 22vw !important; height: 22vw !important; }
-.qr-small img, .qr-small canvas { width: 7vw !important; height: 7vw !important; }
+.qr { background: #fff; padding: 2.2vw; border-radius: 12px; line-height: 0; } /* wide white border: scanners need it */
+.qr img, .qr canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+.qr-big img, .qr-big canvas { width: 26vw !important; height: 26vw !important; }
+.qr-small img, .qr-small canvas { width: 11vw !important; height: 11vw !important; }
 
 .toast { position: absolute; left: 50%; bottom: 6vh; transform: translateX(-50%); background: rgba(0,0,0,.85);
   color: #fff; padding: 1.5vh 2.5vw; border-radius: 12px; font-size: 2vw; }
@@ -71,7 +71,7 @@ h1 { margin: 0; }
 .ctl-btn:hover { background: #2f2a55; }
 
 .join-small { display: flex; align-items: center; gap: 1.2vw; }
-.join-small .qr { padding: 6px; border-radius: 8px; }
+.join-small .qr { padding: 1vw; border-radius: 8px; }
 .mode-note { margin: 0; font-size: 1.1vw; color: var(--accent-2); }
 
 /* covers the whole screen while muted, so a tap anywhere (even on the video) turns sound on */
@@ -99,3 +99,9 @@ h1 { margin: 0; }
   border: 1px solid #322c5a; background: rgba(24, 21, 46, .75); font-size: 20px; cursor: pointer; opacity: .55;
   transition: opacity .2s, transform .2s; }
 .install-mini:hover, .install-mini:focus { opacity: 1; transform: scale(1.1); outline: 2px solid #ff4fa3; }
+
+/* song progress bar along the bottom of the video: display only, not clickable */
+.seek { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; z-index: 30; pointer-events: none;
+  background: rgba(255, 79, 163, .22); }
+.seek-fill { height: 100%; width: 0; background: #ff4fa3; box-shadow: 0 0 12px #ff4fa3; transition: width .5s linear; }
+.install-mini { bottom: 22px; } /* keep the install icon just above the bar */

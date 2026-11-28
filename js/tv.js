@@ -17,7 +17,8 @@
   function drawQr(el, size) {
     if (!window.QRCode) { el.textContent = ''; return; }
     el.innerHTML = '';
-    new window.QRCode(el, { text: joinUrl, width: size, height: size, correctLevel: window.QRCode.CorrectLevel.M });
+    // draw large and sharp; level L = fewer, bigger squares, easier for older phone cameras to read off a TV
+    new window.QRCode(el, { text: joinUrl, width: 512, height: 512, colorDark: '#000000', colorLight: '#ffffff', correctLevel: window.QRCode.CorrectLevel.L });
   }
 
   $('newRoomLink').addEventListener('click', function (e) {
@@ -217,6 +218,15 @@
   document.addEventListener('keydown', function (e) {
     if (scoring && (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape')) { e.preventDefault(); e.stopImmediatePropagation(); closeScore(); }
   }, true);
+
+  // ----- progress bar (display only) -----
+  setInterval(function () {
+    var show = !!(playerReady && data.current && player.getDuration && player.getDuration() > 0);
+    $('seek').classList.toggle('hidden', !show);
+    if (!show) { $('seekFill').style.width = '0'; return; }
+    var pct = Math.min(100, player.getCurrentTime() / player.getDuration() * 100);
+    $('seekFill').style.width = pct + '%';
+  }, 500);
 
   // pasted links may have no title yet: take it from the player
   function fillTitle() {
