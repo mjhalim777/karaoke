@@ -24,6 +24,9 @@
       border-radius: 999px; padding: 12px 28px; cursor: pointer; }
     .install:hover, .install:focus { filter: brightness(1.1); outline: none; }
     .hidden { display: none !important; }
+    .yt-credit { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+      margin-top: 12px; color: var(--muted); font-size: 14px; }
+    .yt-credit a { color: var(--muted); }
   </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0d0b1a">
@@ -44,7 +47,9 @@
       <button id="installBtn" class="install hidden">⬇️ Install app</button>
       <span id="installHelp" class="hidden" style="color:var(--muted);font-size:14px"></span>
     </p>
-    <p style="margin-top:16px"><a href="usage" style="color:var(--muted)">📊 Usage of free limits</a> · <a href="privacy" style="color:var(--muted)">Privacy</a></p>
+    <p style="margin-top:16px"><a href="usage" style="color:var(--muted)">📊 Usage of free limits</a> · <a href="privacy" style="color:var(--muted)">Privacy Policy</a> · <a href="terms" style="color:var(--muted)">Terms of Service</a></p>
+    <p class="yt-credit"><svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#ff0000"/><path d="M11 5.5v9l8-4.5z" fill="#fff"/></svg>
+      Songs found and played with <b>YouTube</b> · By using this site you agree to the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a></p>
   </main>
   <script src="js/pwa.js?v=202611280818"></script>
 </body>
