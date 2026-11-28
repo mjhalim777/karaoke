@@ -10,7 +10,7 @@
   if (!S.isValidCode(code)) code = S.makeRoomCode();
   localStorage.setItem('karaoke-tv-room', code);
 
-  var joinUrl = new URL('remote.html?room=' + code, location.href).href;
+  var joinUrl = new URL('remote?room=' + code, location.href).href;
   ['startCode', 'idleCode', 'sideCode'].forEach(function (id) { $(id).textContent = code; });
   $('joinUrl').textContent = joinUrl.replace(/^https?:\/\//, '');
 

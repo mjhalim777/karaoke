@@ -1,8 +1,8 @@
 /* Makes the site installable as an app and lets its pages open even with a weak connection.
  * Network first (so updates show up right away); the saved copy is used only when offline.
  * Firebase and YouTube requests are never cached. */
-var CACHE = 'karaoke-v3';
-var SHELL = ['./', 'index.html', 'tv.html', 'remote.html', 'usage.html', 'config.js',
+var CACHE = 'karaoke-v4';
+var SHELL = ['./', 'tv', 'remote', 'usage', 'index.html', 'tv.html', 'remote.html', 'usage.html', 'config.js',
   'js/sync.js', 'js/tv.js', 'js/sfx.js', 'js/remote.js', 'js/songs.js', 'css/tv.css', 'css/remote.css',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 

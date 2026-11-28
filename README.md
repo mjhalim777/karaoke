@@ -11,8 +11,8 @@ The TV and the phones talk to each other through **Firebase Realtime Database** 
 
 Final addresses (after step 3):
 
-- TV: https://mjhalim777.github.io/karaoke/tv.html
-- Phone: https://mjhalim777.github.io/karaoke/remote.html
+- TV: https://mjhalim777.github.io/karaoke/tv
+- Phone: https://mjhalim777.github.io/karaoke/remote
 - Home page: https://mjhalim777.github.io/karaoke/
 
 ---
@@ -112,7 +112,7 @@ Without a key, phones can still add songs by **pasting a YouTube link** (in the 
 
 ## Using it
 
-1. On the TV browser, open **https://mjhalim777.github.io/karaoke/tv.html** and press **Start** (OK on the remote). Browsers only allow sound after a press, and this also switches to fullscreen.
+1. On the TV browser, open **https://mjhalim777.github.io/karaoke/tv** and press **Start** (OK on the remote). Browsers only allow sound after a press, and this also switches to fullscreen.
 2. On your phone, scan the QR code on the TV (or open `remote.html` and type the 4-letter room code).
 3. Type your name, search for a song, and tap **Add**. The TV starts playing it, and when a song ends the next one starts automatically.
 4. The **Queue** tab lets you move songs up or down (▲ ▼) or remove them (✕). ⏸ / ▶ pauses and plays, ⏭ skips.
