@@ -150,6 +150,12 @@
     var r = statsRef('searches/' + quotaDay());
     if (r) r.transaction(function (n) { return (n || 0) + 1; });
   }
+  // stats/activeRooms/{code}: when a room was last used. A daily GitHub Action deletes rooms
+  // that haven't been used for 7 days (see .github/workflows/cleanup-rooms.yml).
+  function touchRoom(code) {
+    var r = statsRef('activeRooms/' + code);
+    if (r) r.set(window.firebase.database.ServerValue.TIMESTAMP);
+  }
   function trackOnline(kind) {
     if (!hasFirebase()) return;
     var me = statsRef('online').push();
@@ -171,6 +177,7 @@
     quotaDay: quotaDay,
     statsRef: statsRef,
     countSearch: countSearch,
-    trackOnline: trackOnline
+    trackOnline: trackOnline,
+    touchRoom: touchRoom
   };
 })();

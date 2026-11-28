@@ -29,6 +29,7 @@
 
   var room = S.connect(code);
   S.trackOnline('tv');
+  S.touchRoom(code);
   if (room.mode === 'demo') {
     $('modeNote').textContent = 'Demo mode: Firebase is not set up, so only tabs in this browser can join.';
     $('modeNote').classList.remove('hidden');
@@ -51,6 +52,7 @@
     var next = S.sortedQueue(data)[0];
     var updates = { skip: null, paused: false };
     if (next) {
+      S.touchRoom(code);
       updates.current = {
         key: next.key, videoId: next.videoId, title: next.title || '',
         singer: next.singer || '', startedAt: Date.now()

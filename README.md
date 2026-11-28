@@ -52,6 +52,12 @@ Firebase is what lets a phone add a song and have it show up on the TV.
              ".write": true,
              ".validate": "newData.val() === 'tv' || newData.val() === 'phone'"
            }
+         },
+         "activeRooms": {
+           "$code": {
+             ".write": "$code.matches(/^[A-HJ-NP-Z2-9]{4}$/)",
+             ".validate": "newData.isNumber() && newData.val() <= now"
+           }
          }
        }
      }
@@ -144,3 +150,9 @@ Then open http://localhost:8000/tv.html in one tab and http://localhost:8000/rem
 ## Usage page
 
 `usage.html` shows how much of each free limit is used: YouTube searches today (out of ~100/day) and devices connected to Firebase right now (out of 100). The TV and phone pages write these counts under `stats/` in the database, which the rules above allow.
+
+## Automatic cleanup of old rooms
+
+`.github/workflows/cleanup-rooms.yml` runs every day at 4:00 AM Philippine time. It deletes rooms that haven't been used for 7 days (song titles and singer names included) and daily search counts older than 60 days. The TV and phones record when a room was last used under `stats/activeRooms`. You can run it by hand from the repo's **Actions** tab → "Clean up old rooms" → **Run workflow**.
+
+GitHub pauses scheduled workflows in repos with no activity for 60 days; if that happens, open the Actions tab and re-enable it.

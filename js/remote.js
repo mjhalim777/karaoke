@@ -25,6 +25,7 @@
     localStorage.setItem('karaoke-remote-room', c);
     if (new URLSearchParams(location.search).get('room') !== c) history.replaceState(null, '', '?room=' + c);
     room = S.connect(c);
+    S.touchRoom(c);
     if (!onlineTracked) { S.trackOnline('phone'); onlineTracked = true; }
     $('roomCode').textContent = c;
     $('joinView').classList.add('hidden');
