@@ -145,16 +145,18 @@
     });
   };
 
-  // Browsers may block autoplay with sound until someone clicks the page.
-  // If the song hasn't started shortly after loading, play it muted and ask for one tap to unmute.
+  // Browsers may block autoplay with sound until someone taps the page once.
+  // We never mute: if the song can't start with sound, we wait and ask for one tap/OK, then play it with sound.
+  // After that first tap the browser allows sound for the rest of the night.
   var needsUnmute = false;
   function ensurePlaying(key) {
     setTimeout(function () {
       if (!player || !data.current || data.current.key !== key || data.paused) return;
       var st = player.getPlayerState();
-      if (st === window.YT.PlayerState.PLAYING || st === window.YT.PlayerState.BUFFERING) return;
-      player.mute();
-      player.playVideo();
+      if (st === window.YT.PlayerState.PLAYING || st === window.YT.PlayerState.BUFFERING) {
+        if (player.isMuted && player.isMuted()) player.unMute();
+        return;
+      }
       needsUnmute = true;
       $('unmute').classList.remove('hidden');
     }, 1500);
@@ -164,6 +166,7 @@
     needsUnmute = false;
     player.unMute();
     player.setVolume(100);
+    player.playVideo();
     $('unmute').classList.add('hidden');
   }
   document.addEventListener('click', unmute, true);

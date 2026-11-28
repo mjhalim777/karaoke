@@ -93,3 +93,9 @@ h1 { margin: 0; }
 .score-msg { margin: 0; font-size: 3.4vw; font-weight: 800; color: #fff; }
 .score-who { margin: 1.5vh 0 0; font-size: 1.8vw; color: #a49cc9; }
 @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* small install icon (only shown when the browser can install the app) */
+.install-mini { position: fixed; left: 14px; bottom: 14px; z-index: 40; width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid #322c5a; background: rgba(24, 21, 46, .75); font-size: 20px; cursor: pointer; opacity: .55;
+  transition: opacity .2s, transform .2s; }
+.install-mini:hover, .install-mini:focus { opacity: 1; transform: scale(1.1); outline: 2px solid #ff4fa3; }
